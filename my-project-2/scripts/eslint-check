@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+
+# paths
+FILEDIR_PATH=$(dirname $(realpath "$0"))
+PROJECT_PATH=$(cd $FILEDIR_PATH; cd ..; pwd)
+
+cd $PROJECT_PATH
+
+docker compose exec frontend yarn eslint:check
+docker compose exec backend yarn eslint:check

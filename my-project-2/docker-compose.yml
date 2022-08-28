@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  backend:
+    image: node:16
+    user: 1000:1000
+    container_name: dev-my-project-backend
+    restart: unless-stopped
+    environment:
+      - NODE_OPTIONS=--max_old_space_size=2048
+    volumes:
+      - ./apps/backend:/srv/app
+    working_dir: /srv/app
+    ports:
+      - 8081:8081
+    command: > 
+      sh -c "
+        yarn && yarn dev
+      "
+  frontend:
+    image: node:16
+    user: 1000:1000
+    container_name: 'dev-my-project-frontend'
+    restart: unless-stopped
+    environment:
+      - NODE_OPTIONS=--max_old_space_size=2048
+    volumes:
+      - ./apps/frontend:/srv/app
+    working_dir: /srv/app
+    ports:
+      - 3000:3000
+    command: > 
+      sh -c "
+        yarn && yarn dev
+      "
+
