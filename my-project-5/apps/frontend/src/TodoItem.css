@@ -1,0 +1,52 @@
+.todo-item-root {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.todo-item {
+  display: flex;
+  flex-grow: 1;
+  align-items: flex-start;
+  justify-content: space-between;
+  border: solid 1px rgb(194, 194, 194);
+  height: 48px;
+  align-items: center;
+  padding: 0 8px;
+  background-color: white;
+}
+
+.todo-item-checkbox {
+  margin-right: 8px;
+}
+
+.todo-item.completed {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+.todo-item.completed .todo-item-name {
+  opacity: 0.4;
+  text-decoration: line-through;
+}
+
+.todo-item-delete-btn {
+  color: rgb(220, 53, 68);
+  font-weight: bold;
+  background: none;
+  border: none;
+  border-radius: 4px;
+  padding: 0 8px;
+  cursor: pointer;
+  height: 30px;
+}
+
+.todo-item-delete-btn
+
+.todo-item-delete-btn:hover {
+  background-color: rgba(220, 53, 68, 0.15);  
+}
+
+.todo-item-delete-btn:active {
+  background-color: rgba(220, 53, 68, 0.3);
+  
+}

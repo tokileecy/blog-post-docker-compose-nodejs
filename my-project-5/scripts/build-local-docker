@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+
+# paths
+FILEDIR_PATH=$(dirname $(realpath "$0"))
+PROJECT_PATH=$(cd $FILEDIR_PATH; cd ..; pwd)
+LOCAL_COMPOSE_PATH="$PROJECT_PATH/docker-compose.local.yml"
+LOCAL_ENV_FILE_PATH="$PROJECT_PATH/.local.env"
+
+docker compose -f $LOCAL_COMPOSE_PATH --env-file $LOCAL_ENV_FILE_PATH build
