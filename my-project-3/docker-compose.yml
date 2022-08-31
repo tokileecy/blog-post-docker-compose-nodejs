@@ -1,0 +1,54 @@
+version: '3'
+
+volumes:
+  postgres-store:
+services:
+  postgres:
+    image: postgres
+    container_name: dev-my-project-postgres
+    environment:
+      - POSTGRES_DB=$DATABASE_NAME
+      - POSTGRES_USER=$DATABASE_USERNAME
+      - POSTGRES_PASSWORD=$DATABASE_PASSWORD
+    volumes:
+      - postgres-store:/var/lib/postgresql/data
+  backend:
+    image: node:16
+    user: 1000:1000
+    container_name: dev-my-project-backend
+    restart: unless-stopped
+    environment:
+      - NODE_OPTIONS=--max_old_space_size=2048
+      - ALLOW_CORS_ORIGIN=$ALLOW_CORS_ORIGIN
+      - DATABASE_URL=postgresql://$DATABASE_USERNAME:$DATABASE_PASSWORD@postgres:5432/$DATABASE_NAME?connect_timeout=300
+    volumes:
+      - ./apps/backend:/srv/app
+    working_dir: /srv/app
+    ports:
+      - 5555:5555
+      - 8081:8081
+    depends_on:
+      - postgres
+    command: > 
+      sh -c "
+        yarn && yarn prisma migrate dev && yarn dev
+      "
+  frontend:
+    image: node:16
+    user: 1000:1000
+    container_name: 'dev-my-project-frontend'
+    restart: unless-stopped
+    environment:
+      - NODE_OPTIONS=--max_old_space_size=2048
+      - REACT_APP_ENV=development
+      - REACT_APP_PUBLIC_BACKEND_URL=$PUBLIC_BACKEND_URL
+    volumes:
+      - ./apps/frontend:/srv/app
+    working_dir: /srv/app
+    ports:
+      - 3000:3000
+    command: > 
+      sh -c "
+        yarn && yarn dev
+      "
+
