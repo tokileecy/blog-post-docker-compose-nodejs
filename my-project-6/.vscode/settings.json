@@ -1,0 +1,10 @@
+{
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": true
+	},
+	"eslint.workingDirectories": [
+		"./apps/frontend",
+		"./apps/backend"
+	],
+	"editor.tabSize": 2
+}

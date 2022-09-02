@@ -1,0 +1,55 @@
+name: Create and publish a Docker image
+
+on:
+  push:
+    tags:
+      - "proj6*"
+
+env:
+  DOCKER_REGISTRY: ghcr.io
+  DOCKER_USERNAME: ${{ github.actor }}
+  DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  build-and-push-docker-image:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        docker-config:
+          - dockerfile: my-project-6/apps/backend/docker/Dockerfile
+            name: backend
+            context: my-project-6/apps/backend
+          - dockerfile: my-project-6/apps/frontend/docker/Dockerfile
+            name: frontend
+            context: my-project-6/apps/frontend
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.DOCKER_REGISTRY }}
+          username: ${{ env.DOCKER_USERNAME }}
+          password: ${{ env.DOCKER_PASSWORD }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ env.DOCKER_REGISTRY }}/${{ github.repository }}-${{ matrix.docker-config.name }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: ${{ matrix.docker-config.context }}
+          file: ${{ matrix.docker-config.dockerfile }}
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
