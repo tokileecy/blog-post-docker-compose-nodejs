@@ -40,8 +40,6 @@ services:
     restart: unless-stopped
     environment:
       - NODE_OPTIONS=--max_old_space_size=2048
-      - REACT_APP_ENV=development
-      - REACT_APP_PUBLIC_BACKEND_URL=$PUBLIC_BACKEND_URL
     volumes:
       - ./apps/frontend:/srv/app
     working_dir: /srv/app
