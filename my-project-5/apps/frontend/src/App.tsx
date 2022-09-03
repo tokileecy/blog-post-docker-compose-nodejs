@@ -73,7 +73,11 @@ function App() {
   };
 
   useEffect(() => {
-    fetchTodos();
+    const init = async () => {
+      await api.refreshBackendURL();
+      await fetchTodos();
+    };
+    init();
   }, []);
 
   return (

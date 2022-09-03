@@ -6,13 +6,8 @@ declare global {
   }
 }
 
-const REACT_APP_PUBLIC_BACKEND_URL =
-  process.env.NODE_ENV === 'production'
-    ? window.REACT_APP_PUBLIC_BACKEND_URL
-    : process.env.REACT_APP_PUBLIC_BACKEND_URL;
-
 const apiInstance = axios.create({
-  baseURL: REACT_APP_PUBLIC_BACKEND_URL,
+  baseURL: '',
   timeout: 10_000,
 });
 
@@ -23,6 +18,21 @@ export interface Todo {
 }
 
 const api = {
+  async refreshBackendURL() {
+    try {
+      if (process.env.NODE_ENV === 'production') {
+        const res = await axios.get(
+          `backend-url.${process.env.REACT_APP_BUILD_HASH}.txt`,
+        );
+        apiInstance.defaults.baseURL = res.data as string;
+      } else {
+        apiInstance.defaults.baseURL = process.env.REACT_APP_PUBLIC_BACKEND_URL;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  },
+
   listTodos() {
     return apiInstance.get<Todo[]>('/todos');
   },

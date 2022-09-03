@@ -20,4 +20,4 @@ WORKDIR /usr/share/nginx/html
 COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=builder /usr/src/app_build_hash /usr/src/app_build_hash
 COPY --from=builder /srv/app/build /usr/share/nginx/html
-COPY docker/generate-env-config.sh /docker-entrypoint.d/generate-env-config.sh
+COPY docker/generate-backend-url.sh /docker-entrypoint.d/generate-backend-url.sh
